@@ -4,8 +4,6 @@ let minutes = 0;
 let hours = 0;
 let initiate;
 
-// const timer = document.querySelector(".timer");
-
 const startBtn = document.querySelector(".start-btn");
 const stopBtn = document.querySelector(".stop-btn");
 const resetBtn = document.querySelector(".reset-btn");
@@ -31,12 +29,9 @@ function displayTime() {
   let hour = hours < 10 ? "0" + hours : hours;
   let min = minutes < 10 ? "0" + minutes : minutes;
   let sec = seconds < 10 ? "0" + seconds : seconds;
-  let ms = milliseconds;
-  if (ms < 10) {
-    ms = "00" + ms;
-  } else if (ms < 100) {
-    ms = "0" + ms;
-  }
+  let ms = milliseconds < 10 ? "00" + milliseconds : milliseconds < 100 ? "0" + milliseconds : milliseconds;
+
+  ms = ms.toString().padStart(3, '0').slice(0, 2);
 
   document.querySelector(".milliseconds").innerHTML = ms;
   document.querySelector(".seconds").innerHTML = sec;
@@ -44,22 +39,25 @@ function displayTime() {
   document.querySelector(".hours").innerHTML = hour;
 }
 
-startBtn.addEventListener("click", () => {
+function start() {
+  startBtn.disabled = true; // Disable the start button
   initiate = setInterval(displayTime, 10);
-});
+}
 
-stopBtn.addEventListener("click", () => {
+function stop() {
   clearInterval(initiate);
-});
+  startBtn.disabled = false; // Enable the start button when stopped
+}
 
-resetBtn.addEventListener("click", () => {
+function reset() {
   clearInterval(initiate);
   milliseconds = 0;
   seconds = 0;
   minutes = 0;
   hours = 0;
-  document.querySelector(".milliseconds").innerHTML = "000";
+  document.querySelector(".milliseconds").innerHTML = "00";
   document.querySelector(".seconds").innerHTML = "00";
   document.querySelector(".minutes").innerHTML = "00";
   document.querySelector(".hours").innerHTML = "00";
-});
+  startBtn.disabled = false; // Enable the start button after reset
+}
